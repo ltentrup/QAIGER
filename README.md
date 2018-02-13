@@ -2,14 +2,15 @@
 
 ## Preface
 
-AIGER is a popular format among the verification community, it provides the base for the Hardware Model Checking Competition (HWMCC) and Reactive Synthesis Competition (SyntComp).
-In the context of quantified Boolean Formulas (QBF), AIGER is often used as a format to encode certificates.
+This document defines the QAIGER format to represent quantified Boolean formulas (QBF) and their certificates based on the popular AIGER format. [AIGER](http://fmv.jku.at/aiger/) is a simple circuit format that comes with substantial tool support ([AIGER tools](http://fmv.jku.at/aiger/aiger-1.9.9.tar.gz), [ABC](https://people.eecs.berkeley.edu/~alanmi/abc/)). It is already used to represent systems and problems in the [Hardware Model Checking Competition (HWMCC)](http://fmv.jku.at/hwmcc17/) and the [Reactive Synthesis Competition (SyntComp)](http://www.syntcomp.org/). 
 
-## Format
+The QAIGER format consists of two parts. First we define how QBFs are represented and then we define how certificates (i.e. proofs of correctness for results of QBF solvers) are represented. 
 
-Throughout this section we use the following example QBF: $\forall x \exists y \colon x \leftrightarrow y$.
+## Input Format
 
-The format is based on the AIGER 1.9 format.
+Throughout this section we use the following example QBF: ∀ x ∃ y. x ↔ y 
+
+The format is based on the [AIGER 1.9](http://fmv.jku.at/papers/BiereHeljankoWieringa-FMV-TR-11-2.pdf) format.
 
 
 ### Variables
@@ -56,7 +57,9 @@ forall x, exists y, x <-> y
 
 ## Certification
 
-The format for certification is also based on AIGER.
+The format for certification is also based on AIGER. 
+The QBF solvers [DepQBF](http://lonsing.github.io/depqbf/), [CAQE](https://www.react.uni-saarland.de/tools/caqe/), and [CADET](https://www.react.uni-saarland.de/tools/caqe/) already support the AIGER format for certificates, but show subtle differences in their encodings. This document is also an effort to unify the tool support for certificates of QBF solvers. 
+
 The inputs and outputs of the AIGER file are based on the result of the satisfiability check:
 
 * If the instance is true (satisfiable), the inputs and outputs are universal and existential variables, respectively.
@@ -76,7 +79,7 @@ o0 y
 
 Given instance `instance.aag` and certificate `certificate.aag`.
 
-1. Check whether certificate is Skolem or Herbrand.
+1. Check whether certificate is Skolem or Herbrand (i.e. if it represents a proof of a true QBF or if it represents a refutation of a false QBF).
 2. Create copy of `instance.aag` where variables are replaced by their functions from `certificate.aag`.
 3. Check whether the resulting AIGER file satisfies/violates the given properties.
 
