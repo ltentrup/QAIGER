@@ -43,7 +43,7 @@ forall x, exists y, x <-> y
 
 ## Certification
 
-Some QBF solvers (e.g. [DepQBF](http://lonsing.github.io/depqbf/), [CAQE](https://www.react.uni-saarland.de/tools/caqe/), and [CADET](https://www.react.uni-saarland.de/tools/caqe/)) do not only provide a yes/no answer but also provide a proof (in the form of a Skolem function or Herbrand function) for their result. 
+Some QBF solvers (e.g. [DepQBF](http://lonsing.github.io/depqbf/), [CAQE](https://www.react.uni-saarland.de/tools/caqe/), and [CADET](https://github.com/MarkusRabe/cadet)) do not only provide a yes/no answer but also provide a proof (in the form of a Skolem function or Herbrand function) for their result. 
 These proofs are typically also represented as AIGER circuits, but different tools have subtle differences in their encodings. 
 This document is also an effort to unify the tool support for certificates of QBF solvers. 
 
