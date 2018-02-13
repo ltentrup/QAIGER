@@ -8,51 +8,41 @@ The QAIGER format consists of two parts. First we define how QBFs are represente
 
 ## Input Format
 
-Throughout this section we use the following example QBF: ∀ x ∃ y. x ↔ y 
+QAIGER input format defines QBFs in prenex form, i.e. it represents formulas that start with a quantifier prefix followed by a propositional (i.e. quantifier-free) part. For example consider this QBF in prenex form: ∀ x ∃ y. x ↔ y 
 
-The format is based on the [AIGER 1.9](http://fmv.jku.at/papers/BiereHeljankoWieringa-FMV-TR-11-2.pdf) format.
-
+Throughout this section we use this example formua to discuss the QAIGER input format. 
 
 ### Variables
 
-QBF variables are encoded as inputs.
-The AIGER symbol table stores the necessary information to reconstruct the quantifier prefix.
-We propose the following format: `[level] [name]`, e.g., `1 x` and `2 y`. In this case, odd numbers would encode universal quantifier levels and even numbers existential ones.
+Variables of the QBF are represented as the inputs of the AIGER circuit. 
+All inputs must be given a quantifier level in the symbol table, optionally followed by space character and an arbitrary name. 
+Quantifier levels are numbers from 0 to INT_MAX (i.e. 2147483647), where even numbers represent existential quantifiers and odd numbers represent universal quantifiers. 
+Quantifiers with higher numbers are in the scope of quantifiers with lower numbers. 
+In particular, variables with quantifier level 0 are constants. 
 
+### Semantics
 
-Alternatives:
+QAIGER circuits have a single output that indicates if the formula is true or false for the given variable assignment (i.e. the inputs). 
 
-* Use positive/negative numbers for quantifier levels
-* Build the quantifier levels explicitly `[quantifier-type] [name]`, then the order of variables would be relevant, e.g., `a x` and `e y`.
+That is, for now we restrict QAIGER to the [original AIGER format](http://fmv.jku.at/papers/Biere-FMV-TR-07-1.pdf), without the extensions discussed for [AIGER 1.9](http://fmv.jku.at/papers/BiereHeljankoWieringa-FMV-TR-11-2.pdf). 
+This is because an important tool for minimizing circuits, the ABC model checker, still has only limited support for the new AIGER format. 
 
-
-### Properties
-
-We propose to use the standard AIGER semantics for invariant and bad state constraints, that is $c \rightarrow g$ where $g = \overline{b}$, $c \equiv \bigwedge_{k=1}^C c_k$, and $b \equiv \bigvee_{k=1}^B b_k$.
-
-Alternative: Use the single output as constraint as in AIGER pre 1.9
 
 ### Example
 
 ```aiger
-aag 5 2 0 0 3 1
-2                        universal x
-4                        existential y
-11                       bad !(AND 10)
-6 2 5                    x & !y
-8 3 4                    !x & y
-10 7 9                   !(x & !y) & !(!x & y) = (!x | y) & (x | !y)
-i0 1 x
-i1 2 y
+aag 5 2 0 1 3
+2                        first input, universal variable x
+4                        second input, existential variable y
+10                       defines output as signal 10
+6 2 5                    defines signal 6 as x & !y
+8 3 4                    defines signal 8 as !x & y
+10 7 9                   defines signal 10 as !6 & !8
+i0 1 x                   defines variable x to be on quantifier level 1
+i1 2 y                   defines variable y to be on quantifier level 2
 c
 forall x, exists y, x <-> y
 ```
-
-
-## Not Contained/Possible Extensions
-
-* currently prenex-only
-* no support for free variables
 
 
 ## Certification
