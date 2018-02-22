@@ -72,6 +72,7 @@ Given a QBF `problem.aag` and certificate `certificate.aag`. For simplicity, let
 3. Check whether the resulting AIGER circuit outputs 1 (at its only output) for every input. 
 
 
+## Tool Support
 
-
+A conversion tool from the quantified circuit format [QCIR](http://qbf.satisfiability.org/gallery/qcir-gallery14.pdf) is available as part of the solver [QuAbS](https://github.com/ltentrup/quabs).
 
